@@ -1,5 +1,6 @@
 import streamlit as st
 import subprocess
+import psutil
 
 # ⚠️ DEVE SER A PRIMEIRA CHAMADA STREAMLIT
 st.set_page_config(page_title="Quiz Motor 6 Fios", page_icon="⚙️", layout="centered")
@@ -109,6 +110,17 @@ if "pontuou" not in st.session_state:
 if "historico_pontuacao" not in st.session_state:
     st.session_state.historico_pontuacao = []
 
+
+
+def is_process_running(script_name):
+    for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
+        try:
+            if proc.info['cmdline'] and script_name in proc.info['cmdline']:
+                return True
+        except (psutil.NoSuchProcess, psutil.AccessDenied):
+            continue
+    return False
+
 # EXECUÇÃO DO QUIZ
 if st.session_state.indice < len(perguntas):
     pergunta, resposta_correta, explicacao = perguntas[st.session_state.indice]
@@ -146,6 +158,12 @@ if st.session_state.indice < len(perguntas):
             st.session_state.pontuou = False
             st.rerun()
 
+
+
+
+    
+
+
 else:
     # FINAL DO QUIZ
     pontuacao_final = st.session_state.pontuacao * 10
@@ -171,13 +189,13 @@ else:
 
     with col2:
         if st.button("🎮 Iniciar o Jogo de Conexão"):
-            st.success("Iniciando o jogo em uma nova janela...")
-            subprocess.Popen(["python", "jogo_motor.py"])
-            st.stop()
+            if not is_process_running("jogo_motor.py"):
+                subprocess.Popen(["python", "jogo_motor.py"])
+                st.success("Iniciando o jogo em uma nova janela...")
+            else:
+                st.error("O jogo já está rodando.")
 
-
-
-
+            
 
 
 
