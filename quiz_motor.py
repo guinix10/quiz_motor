@@ -189,11 +189,14 @@ else:
 
     with col2:
         if st.button("🎮 Iniciar o Jogo de Conexão"):
-            if not is_process_running("jogo_motor.py"):
-                subprocess.Popen(["python", "jogo_motor.py"])
-                st.success("Iniciando o jogo em uma nova janela...")
-            else:
-                st.error("O jogo já está rodando.")
+            try:
+                if not is_process_running("jogo_motor.py"):
+                    subprocess.Popen(["python", "jogo_motor.py"])
+                    st.success("Iniciando o jogo em uma nova janela...")
+                else:
+                    st.error("O jogo já está rodando.")
+            except Exception as e:
+                st.error(f"O erro é {e}")
 
             
 
