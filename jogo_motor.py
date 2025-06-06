@@ -102,7 +102,7 @@ motor_angle = 0
 quiz_buttons = []
 
 # Carrega som de clique I
-click_sound = pygame.mixer.Sound("somclicker.mp3")
+click_sound = pygame.mixer.Sound("somclicker (1).mp3")
 
 # Inicializa o jogo no modo estrela M
 def init_game_estrela():
